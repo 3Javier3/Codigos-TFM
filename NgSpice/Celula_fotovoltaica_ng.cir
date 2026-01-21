@@ -1,0 +1,33 @@
+* Modelo de Célula Solar para ngspice
+.param Iph_val=3.5
+.param Is_val=1e-9
+.param N_val=1.5
+.param Rs_val=0.05
+.param Rsh_val=500
+
+* --- Circuito ---
+Iph 0 1 {Iph_val}
+D1 1 0 ModeloTFM
+Rsh 1 0 {Rsh_val}
+Rs 1 2 {Rs_val}
+Vload 2 0 0V
+
+.model ModeloTFM D (IS={Is_val} N={N_val})
+
+* --- Bloque de Control ---
+.control
+    * 1. Ejecutar barrido DC
+    dc Vload 0 0.9 0.005
+    
+    * 2. Calcular la Potencia
+    let potencia = -v(2) * i(vload)
+    
+    * 3. Graficar (Eliminamos 'label' para evitar error)
+    plot -i(vload) title 'Curva I-V (A)'
+    plot potencia title 'Curva P-V (W)'
+    
+    * 4. Guardar datos para Python
+    wrdata resultados_ngspice.txt -i(vload) potencia
+.endc
+
+.end
