@@ -29,14 +29,14 @@ Vload 2 0 0V
     dc Vload 0 0.9 0.005
     
     * 2. Calcular la Potencia
-    let potencia = -v(2) * i(vload)
+    let potencia = v(2) * i(vload)
     
     * 3. Graficas
-    plot -i(vload) title 'Curva I-V (A)'
+    plot i(vload) title 'Curva I-V (A)'
     plot potencia title 'Curva P-V (W)'
     
     * 4. Guardar datos para graficar en Python
-    wrdata resultados_ngspice.txt -i(vload) potencia
+    wrdata resultados_ngspice.txt i(vload) potencia
 .endc
 
 .end
